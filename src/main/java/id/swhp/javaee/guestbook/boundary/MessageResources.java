@@ -4,6 +4,10 @@ import id.swhp.javaee.guestbook.entity.GuestBook;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.json.Json;
+import javax.json.JsonArray;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -22,14 +26,18 @@ public class MessageResources {
     Message message;
 
     @GET
-    public List<GuestBook> findAll() {
-        return this.message.findAll();
+    public JsonArray findAll() {
+        JsonArrayBuilder list = Json.createArrayBuilder();
+        List<GuestBook> all = this.message.findAll();
+        all.stream().map(GuestBook::toJson).forEach(list::add);
+        return list.build();
     }
 
     @GET
     @Path("{id}")
-    public GuestBook findById(@PathParam("id") Long id) {
-        return this.message.findById(id);
+    public JsonObject findById(@PathParam("id") Long id) {
+        GuestBook guestBook = this.message.findById(id);
+        return guestBook.toJson();
     }
 
     @POST
