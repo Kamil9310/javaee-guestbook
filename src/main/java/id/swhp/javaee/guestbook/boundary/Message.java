@@ -24,8 +24,8 @@ public class Message {
         return this.em.find(GuestBook.class, id);
     }
 
-    public GuestBook create(GuestBook guestBook) {
-        return this.em.merge(guestBook);
+    public void create(GuestBook guestBook) {
+        this.em.persist(guestBook);
     }
 
     public void remove(GuestBook guestBook) {

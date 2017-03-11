@@ -10,8 +10,10 @@ import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class MessageResources {
 
     @Inject
     Message message;
+
+    @Context
+    UriInfo uriInfo;
 
     @GET
     public JsonArray findAll() {
@@ -46,6 +51,10 @@ public class MessageResources {
     @POST
     public Response save(@Valid GuestBook guestBook) {
         this.message.create(guestBook);
-        return Response.ok().build();
+        final URI self = this.uriInfo.getBaseUriBuilder()
+                .path(MessageResources.class)
+                .path(MessageResources.class, "findById")
+                .build(guestBook.getId());
+        return Response.created(self).build();
     }
 }
