@@ -2,6 +2,7 @@ package id.swhp.javaee.guestbook;
 
 import id.swhp.javaee.guestbook.boundary.MessageResources;
 import id.swhp.javaee.guestbook.boundary.RootResources;
+import id.swhp.javaee.guestbook.entity.GuestBook;
 
 import javax.json.Json;
 import javax.json.JsonObject;
@@ -19,9 +20,7 @@ import static javax.json.Json.createObjectBuilder;
  */
 public class EntityBuilder {
 
-    public JsonObject buildIndex(UriInfo uriInfo) {
-        final URI self = uriInfo.getBaseUriBuilder().path(RootResources.class).build();
-        final URI message = uriInfo.getBaseUriBuilder().path(MessageResources.class).build();
+    public JsonObject buildIndex(URI self, URI message) {
         final JsonObjectBuilder builder = createObjectBuilder();
 
         builder.add("_links", Json.createArrayBuilder()

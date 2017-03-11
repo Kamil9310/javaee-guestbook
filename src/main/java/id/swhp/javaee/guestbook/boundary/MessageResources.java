@@ -1,5 +1,6 @@
 package id.swhp.javaee.guestbook.boundary;
 
+import id.swhp.javaee.guestbook.ResourceUriBuilder;
 import id.swhp.javaee.guestbook.entity.GuestBook;
 
 import javax.ejb.Stateless;
@@ -30,6 +31,9 @@ public class MessageResources {
     @Inject
     Message message;
 
+    @Inject
+    ResourceUriBuilder resourceUriBuilder;
+
     @Context
     UriInfo uriInfo;
 
@@ -37,7 +41,17 @@ public class MessageResources {
     public JsonArray findAll() {
         JsonArrayBuilder list = Json.createArrayBuilder();
         List<GuestBook> all = this.message.findAll();
-        all.stream().map(GuestBook::toJson).forEach(list::add);
+        all.stream()
+                .map(m -> m.toJson(
+                        resourceUriBuilder.createResourceUri(
+                                MessageResources.class,
+                                "findById",
+                                m.getId(),
+                                uriInfo
+                                )
+                        )
+                )
+                .forEach(list::add);
         return list.build();
     }
 
@@ -45,7 +59,11 @@ public class MessageResources {
     @Path("{id}")
     public JsonObject findById(@PathParam("id") Long id) {
         GuestBook guestBook = this.message.findById(id);
-        return guestBook.toJson();
+        final URI self = this.uriInfo.getBaseUriBuilder()
+                .path(MessageResources.class)
+                .path(MessageResources.class, "findById")
+                .build(guestBook.getId());
+        return guestBook.toJson(self);
     }
 
     @POST
