@@ -3,6 +3,7 @@ package id.swhp.javaee.guestbook.entity;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,8 +27,10 @@ public class GuestBook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlTransient
     private Long id;
+    @NotNull
     private String name;
     @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
     private Date created;
 
     @Override

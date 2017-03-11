@@ -8,8 +8,11 @@ import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObject;
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import java.net.URI;
 import java.util.List;
 
 /**
@@ -41,7 +44,8 @@ public class MessageResources {
     }
 
     @POST
-    public void save(GuestBook guestBook) {
+    public Response save(@Valid GuestBook guestBook) {
         this.message.create(guestBook);
+        return Response.ok().build();
     }
 }
