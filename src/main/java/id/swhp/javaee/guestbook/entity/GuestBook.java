@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.net.URI;
 import java.util.Date;
 
 /**
@@ -65,10 +66,14 @@ public class GuestBook {
                 .append(created).append("]").toString();
     }
 
-    public JsonObject toJson() {
+    public JsonObject toJson(URI self) {
         return Json.createObjectBuilder()
                 .add("name", this.name)
                 .add("created", this.created.toString())
+                .add("_links", Json.createObjectBuilder()
+                        .add("rel", "self")
+                        .add("href", self.toString())
+                )
                 .build();
     }
 }
