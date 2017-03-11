@@ -59,20 +59,18 @@ public class MessageResources {
     @Path("{id}")
     public JsonObject findById(@PathParam("id") Long id) {
         GuestBook guestBook = this.message.findById(id);
-        final URI self = this.uriInfo.getBaseUriBuilder()
-                .path(MessageResources.class)
-                .path(MessageResources.class, "findById")
-                .build(guestBook.getId());
+        final URI self = resourceUriBuilder.createResourceUri(
+                MessageResources.class, "findById", guestBook.getId(), uriInfo
+        );
         return guestBook.toJson(self);
     }
 
     @POST
     public Response save(@Valid GuestBook guestBook) {
         this.message.create(guestBook);
-        final URI self = this.uriInfo.getBaseUriBuilder()
-                .path(MessageResources.class)
-                .path(MessageResources.class, "findById")
-                .build(guestBook.getId());
+        final URI self = resourceUriBuilder.createResourceUri(
+                MessageResources.class, "findById", guestBook.getId(), uriInfo
+        );
         return Response.created(self).build();
     }
 }

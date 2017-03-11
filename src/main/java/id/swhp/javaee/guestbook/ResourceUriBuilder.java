@@ -4,6 +4,8 @@ import javax.ws.rs.core.UriInfo;
 import java.net.URI;
 
 /**
+ * Responsible to build URI for resources class
+ *
  * @author Sukma Wardana
  * @since 1.0.0
  */
